@@ -9,6 +9,23 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
+        #remover {
+            margin: 0 auto;
+            background-color: #fb5b3f;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.5em;
+            border: 2px solid #fff;
+            border-radius: 0.5em;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            position: absolute;
+            left: 0.7em;
+            top: 9em;
+        }
+        #remover:hover {
+            background-color: salmon;
+        }
     </style>
 </head>
 <body>
@@ -58,10 +75,22 @@
 </style>
 
 <nav id="menu"></nav>
+
 <div id="map"></div>
+<!-- <div id="map0"></div> -->
+
+<!-- <div id='remover'>Satellite</div> -->
+
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuaGFvYnJpYW4iLCJhIjoiY2owaXNrNzhnMDB4ZjJxdGoxdHdkd2VibiJ9.Cn_2Ypo7UctdNZHt6OlDHA';
+var map0 = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/satellite-v9',
+    zoom: 12,
+    center: [-122.404684,37.783488]
+});
+
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/wenhaobrian/cjygvkpdg0ugy1dl5jhx3wnln',
@@ -69,7 +98,35 @@ var map = new mapboxgl.Map({
     center: [-122.404684,37.783488]
 });
 
+
+
+$('#remover').click(function(){
+  $('#map').hide();
+  $('#map0').show();
+  // L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', {
+  //   maxZoom: 18,
+  //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+  //   subdomains: 'abcd'
+  // }).addTo(map);
+});
+
+
 map.on('load', function () {
+  //add the satellite layer control
+  // var switchy = document.getElementById('remover');
+  //   switchy.addEventListener("click", function(){
+  //       switchy = document.getElementById('remover');
+  //       if (switchy.className === 'on') {
+  //           switchy.setAttribute('class', 'off');
+  //           map.setLayoutProperty('satellite-v9', 'visibility', 'none');
+  //           switchy.innerHTML = 'Add satellite';
+  //       } else {
+  //           switchy.setAttribute('class', 'on');
+  //           map.setLayoutProperty('satellite-v9', 'visibility', 'visible');
+  //           switchy.innerHTML = 'Remove satellite';
+  //       }
+  //   });
+
   //put the layers beneath the symbols
   //reference: https://docs.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
   var layers = map.getStyle().layers;
