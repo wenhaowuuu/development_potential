@@ -70,10 +70,17 @@ var map = new mapboxgl.Map({
 });
 
 map.on('load', function () {
-    map.addSource('museums', {
-        type: 'vector',
-        url: 'mapbox://mapbox.2opop9hr'
-    });
+  //put the layers beneath the symbols
+  //reference: https://docs.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
+  var layers = map.getStyle().layers;
+  // Find the index of the first symbol layer in the map style
+  var firstSymbolId;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId = layers[i].id;
+      break;
+    }
+  }
     map.addLayer({
         'id': 'seismic',
         'type': 'fill',
@@ -86,12 +93,12 @@ map.on('load', function () {
             'visibility': 'visible'
         },
         'paint': {
-            'fill-color': '#fff000',
+            'fill-color': '#FF5733',
             'fill-opacity': 0.4
 
         },
         // 'source-layer': 'museum-cusco'
-    });
+    }, firstSymbolId);
 
     map.addSource('contours', {
         type: 'vector',
