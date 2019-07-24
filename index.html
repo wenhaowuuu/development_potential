@@ -84,12 +84,12 @@
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuaGFvYnJpYW4iLCJhIjoiY2owaXNrNzhnMDB4ZjJxdGoxdHdkd2VibiJ9.Cn_2Ypo7UctdNZHt6OlDHA';
-var map0 = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-v9',
-    zoom: 12,
-    center: [-122.404684,37.783488]
-});
+// var map0 = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/satellite-v9',
+//     zoom: 12,
+//     center: [-122.404684,37.783488]
+// });
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -99,16 +99,16 @@ var map = new mapboxgl.Map({
 });
 
 
-
-$('#remover').click(function(){
-  $('#map').hide();
-  $('#map0').show();
-  // L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', {
-  //   maxZoom: 18,
-  //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
-  //   subdomains: 'abcd'
-  // }).addTo(map);
-});
+//THIS FOLLOWING CODE CREATE PROBLEM FOR RENDERING THE TOGGLE BUTTONS:
+// $('#remover').click(function(){
+//   $('#map').hide();
+//   $('#map0').show();
+//   // L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', {
+//   //   maxZoom: 18,
+//   //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+//   //   subdomains: 'abcd'
+//   // }).addTo(map);
+// });
 
 
 map.on('load', function () {
