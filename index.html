@@ -45,7 +45,7 @@
 
     #menu a {
         font-size: 13px;
-        color: #404040;
+        color: #444040;
         display: block;
         margin: 0;
         padding: 0;
@@ -72,7 +72,44 @@
     #menu a.active:hover {
         background: #3074a4;
     }
+
+    #header{
+      position:fixed;
+      height:20px;
+      background-color: #FE2E2E;
+      top:0px;
+      left:0;
+      right:0;
+      /* margin-bottom:0px; */
+      z-index:70;
+    }
+
+    #header_text{
+      position:fixed;
+      top:0;
+      left:6px;
+      color:#ffffff;
+      font-weight: bolder;
+      font-family: Arial;
+      font-size: 14px;
+    }
+
+    #map{
+      position:fixed;
+      top:20px;
+      left:0;
+      right:0;
+    }
+
 </style>
+
+<div id = "header" style="font-family: Arial;
+font-size: 14px; color:#ffffff;
+font-weight: bolder;">
+     SOM | Year One Machine Learning Group
+</div>
+
+<!-- <div style="z-index:20;"> SOM | Year One Machine Learning Group Research </div> -->
 
 <nav id="menu"></nav>
 
@@ -137,10 +174,11 @@ map.on('load', function () {
     if (layers[i].type === 'symbol') {
       firstSymbolId = layers[i].id;
       break;
+      }
     }
-  }
+
     map.addLayer({
-        'id': 'seismic',
+        'id': 'Liquefaction Zones',
         'type': 'fill',
         'source': {
               'type': 'geojson',
@@ -151,19 +189,42 @@ map.on('load', function () {
             'visibility': 'visible'
         },
         'paint': {
-            'fill-color': '#FF5733',
+            'fill-color': '#FC6300',
             'fill-opacity': 0.4
 
         },
         // 'source-layer': 'museum-cusco'
     }, firstSymbolId);
 
+
+    map.addLayer({
+        'id': 'Supervisor District',
+        'type': 'line',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+        },
+
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            // 'fill-color': '#5DADE2',
+            // 'fill-opacity': 0.1,
+            'line-color': '#5DADE2',
+            'line-width': 1.5
+
+        },
+
+    });
+
+
     map.addSource('contours', {
         type: 'vector',
         url: 'mapbox://mapbox.mapbox-terrain-v2'
     });
     map.addLayer({
-        'id': 'contours',
+        'id': 'Contour Lines',
         'type': 'line',
         'source': 'contours',
         'source-layer': 'contour',
@@ -179,7 +240,14 @@ map.on('load', function () {
     });
 });
 
-var toggleableLayerIds = [ 'contours', 'seismic', 'Base Model', 'Proximity Model', 'Prediction 2050' ];
+var toggleableLayerIds =
+  [ 'Model 1: Base Model',
+    'Model 2: Proximity Model',
+    'Model 3: Prediction 2050',
+    'Supervisor District',
+    'Liquefaction Zones',
+    'Contour Lines'
+  ];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
