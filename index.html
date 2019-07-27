@@ -32,7 +32,8 @@
 
 <style>
     #menu {
-        background: #fff;
+        /* background: #ffffff; */
+        background-color: #ffffff;
         position: absolute;
         z-index: 1;
         top: 10px;
@@ -45,7 +46,7 @@
 
     #menu a {
         font-size: 13px;
-        color: #444040;
+        color: #34495E;
         display: block;
         margin: 0;
         padding: 0;
@@ -80,7 +81,6 @@
       top:0px;
       left:0;
       right:0;
-      /* margin-bottom:0px; */
       z-index:70;
     }
 
@@ -198,6 +198,24 @@ map.on('load', function () {
 
 
     map.addLayer({
+        'id': 'Pipeline Data',
+        'type': 'fill',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+        },
+
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+          'fill-color': '#5DADE2',
+          'fill-opacity': 0.1
+        },
+
+    });
+
+    map.addLayer({
         'id': 'Supervisor District',
         'type': 'line',
         'source': {
@@ -213,10 +231,83 @@ map.on('load', function () {
             // 'fill-opacity': 0.1,
             'line-color': '#5DADE2',
             'line-width': 1.5
+        },
+    });
 
+    var firstSymbolId1;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId1 = layers[i].id;
+        break;
+        }
+      }
+    map.addLayer({
+        'id': 'Zoned as Industrial',
+        'type': 'fill',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190726_ZONING_INDUSTRIAL.geojson'
         },
 
-    });
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'fill-color': '#AE56FB',
+            'fill-opacity': 0.5
+            // 'line-color': '#5gg8f2',
+            // 'line-width': 1.5
+        },
+    }, firstSymbolId1);
+
+    // Seems that any data larger than 1MB cannot be hosted directly from Github and thus, you can not render them on the webpage.
+    
+    // var firstSymbolId2;
+    // for (var i = 0; i < layers.length; i++) {
+    //   if (layers[i].type === 'symbol') {
+    //     firstSymbolId2 = layers[i].id;
+    //     break;
+    //     }
+    //   }
+    // map.addLayer({
+    //     'id': 'Zoned as Residential',
+    //     'type': 'line',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190726_ZONING_RESIDENTIAL.geojson'
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'visible'
+    //     },
+    //     'paint': {
+    //         'fill-color': '#F4E616',
+    //         'fill-opacity': 0.5
+    //         // 'line-color': '#5DADE2',
+    //         // 'line-width': 1.5
+    //     },
+    // }, firstSymbolId2);
+
+    // map.addLayer({
+    //     'id': 'Flickr Density',
+    //     'type': 'line',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190726_FLICKR_DATA_GREATERTHAN1.geojson'
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'visible'
+    //     },
+    //     'paint': {
+    //         'fill-color': '#ffffE2',
+    //         'fill-opacity': 0.7,
+    //         // 'line-color': '#5DADE2',
+    //         // 'line-width': 1.5
+    //     },
+    // });
+
+
 
 
     map.addSource('contours', {
@@ -241,12 +332,17 @@ map.on('load', function () {
 });
 
 var toggleableLayerIds =
-  [ 'Model 1: Base Model',
+  [
+    'Model 1: Base Model',
     'Model 2: Proximity Model',
     'Model 3: Prediction 2050',
+    'Pipeline Data',
     'Supervisor District',
     'Liquefaction Zones',
-    'Contour Lines'
+    'Zoned as Industrial',
+    'Zoned as Residential',
+    'Contour Lines',
+    'Flickr Density'
   ];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
