@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Development Potential Prediction @SF </title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        #remover {
+            margin: 0 auto;
+            background-color: #fb5b3f;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.5em;
+            border: 2px solid #fff;
+            border-radius: 0.5em;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            position: absolute;
+            left: 0.7em;
+            top: 9em;
+        }
+        #remover:hover {
+            background-color: salmon;
+        }
+    </style>
+</head>
+<body>
+
+<style>
+    #menu {
+        /* background: #ffffff; */
+        background-color: #ffffff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #menu a {
+        font-size: 13px;
+        color: #34495E;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    #menu a:last-child {
+        border: none;
+    }
+
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
+
+    #menu a.active {
+        background-color: #3887be;
+        color: #ffffff;
+    }
+
+    #menu a.active:hover {
+        background: #3074a4;
+    }
+
+    #header{
+      position:fixed;
+      height:20px;
+      background-color: #FE2E2E;
+      top:0px;
+      left:0;
+      right:0;
+      z-index:70;
+    }
+
+    #header_text{
+      position:fixed;
+      top:0;
+      left:6px;
+      color:#ffffff;
+      font-weight: bolder;
+      font-family: Arial;
+      font-size: 14px;
+    }
+
+    #map{
+      position:fixed;
+      top:20px;
+      left:0;
+      right:0;
+    }
+
+</style>
+
+<div id = "header" style="font-family: Arial;
+font-size: 14px; color:#ffffff;
+font-weight: bolder;">
+     SOM | Year One Machine Learning Group
+</div>
+
+<!-- <div style="z-index:20;"> SOM | Year One Machine Learning Group Research </div> -->
+
+<nav id="menu"></nav>
+
+<div id="map"></div>
+<!-- <div id="map0"></div> -->
+
+<!-- <div id='remover'>Satellite</div> -->
+
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuaGFvYnJpYW4iLCJhIjoiY2owaXNrNzhnMDB4ZjJxdGoxdHdkd2VibiJ9.Cn_2Ypo7UctdNZHt6OlDHA';
+// var map0 = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/satellite-v9',
+//     zoom: 12,
+//     center: [-122.404684,37.783488]
+// });
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    // style: 'mapbox://styles/wenhaobrian/cjygvkpdg0ugy1dl5jhx3wnln',
+    style: 'mapbox://styles/wenhaobrian/cjykdqc1t0tti1cnw8mmvr4n4',
+    zoom: 12,
+    center: [-122.404684,37.783488]
+});
+
+
+//THIS FOLLOWING CODE CREATE PROBLEM FOR RENDERING THE TOGGLE BUTTONS:
+// $('#remover').click(function(){
+//   $('#map').hide();
+//   $('#map0').show();
+//   // L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', {
+//   //   maxZoom: 18,
+//   //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+//   //   subdomains: 'abcd'
+//   // }).addTo(map);
+// });
+
+
+map.on('load', function () {
+  //add the satellite layer control
+  // var switchy = document.getElementById('remover');
+  //   switchy.addEventListener("click", function(){
+  //       switchy = document.getElementById('remover');
+  //       if (switchy.className === 'on') {
+  //           switchy.setAttribute('class', 'off');
+  //           map.setLayoutProperty('satellite-v9', 'visibility', 'none');
+  //           switchy.innerHTML = 'Add satellite';
+  //       } else {
+  //           switchy.setAttribute('class', 'on');
+  //           map.setLayoutProperty('satellite-v9', 'visibility', 'visible');
+  //           switchy.innerHTML = 'Remove satellite';
+  //       }
+  //   });
+
+  //put the layers beneath the symbols
+  //reference: https://docs.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
+  var layers = map.getStyle().layers;
+  // Find the index of the first symbol layer in the map style
+  var firstSymbolId;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId = layers[i].id;
+      break;
+      }
+    }
+
+    map.addLayer({
+        'id': 'Liquefaction Zones',
+        'type': 'fill',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/San%20Francisco%20Seismic%20Hazard%20Zones.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            'fill-color': '#FC6300',
+            'fill-opacity': 0.4
+
+        },
+        // 'source-layer': 'museum-cusco'
+    }, firstSymbolId);
+
+
+    // map.addLayer({
+    //     'id': 'Pipeline Data',
+    //     'type': 'fill',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'visible'
+    //     },
+    //     'paint': {
+    //       'fill-color': '#5DADE2',
+    //       'fill-opacity': 0.1
+    //     },
+    //
+    // });
+
+    map.addLayer({
+        'id': 'Supervisor District',
+        'type': 'line',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            // 'fill-color': '#5DADE2',
+            // 'fill-opacity': 0.1,
+            'line-color': '#5DADE2',
+            'line-width': 1.5
+        },
+    });
+
+    //add the M1 predicted YES parcels based on Logistic Regression algorithm:
+
+    var firstSymbolId1;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId1 = layers[i].id;
+        break;
+        }
+      }
+    map.addLayer({
+        'id': 'Model 1: Base Model',
+        'type': 'fill',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190729_M1_PREDICTED_PRCLS_YES.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            'fill-color': '#E74C3C',
+            'fill-opacity': 0.8
+            // 'line-color': '#5gg8f2',
+            // 'line-width': 1.5
+        },
+    }, firstSymbolId1);
+
+
+    //add the M2 predicted YES parcels based on Logistic Regression algorithm:
+
+    var firstSymbolId2;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId2 = layers[i].id;
+        break;
+        }
+      }
+    map.addLayer({
+        'id': 'Model 2: Proximity Model',
+        'type': 'fill',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190729_M2_PREDICTED_PRCLS_YES.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            'fill-color': '#EC7063',
+            'fill-opacity': 0.8
+            // 'line-color': '#5gg8f2',
+            // 'line-width': 1.5
+        },
+    }, firstSymbolId2);
+
+
+
+    var firstSymbolId3;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId3 = layers[i].id;
+        break;
+        }
+      }
+    map.addLayer({
+        'id': 'Zoned as Industrial',
+        'type': 'fill',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190726_ZONING_INDUSTRIAL.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            'fill-color': '#AE56FB',
+            'fill-opacity': 0.5
+            // 'line-color': '#5gg8f2',
+            // 'line-width': 1.5
+        },
+    }, firstSymbolId3);
+
+    // Seems that any data larger than 1MB cannot be hosted directly from Github and thus, you can not render them on the webpage.
+
+    // var firstSymbolId2;
+    // for (var i = 0; i < layers.length; i++) {
+    //   if (layers[i].type === 'symbol') {
+    //     firstSymbolId2 = layers[i].id;
+    //     break;
+    //     }
+    //   }
+    // map.addLayer({
+    //     'id': 'Zoned as Residential',
+    //     'type': 'line',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190726_ZONING_RESIDENTIAL.geojson'
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'visible'
+    //     },
+    //     'paint': {
+    //         'fill-color': '#F4E616',
+    //         'fill-opacity': 0.5
+    //         // 'line-color': '#5DADE2',
+    //         // 'line-width': 1.5
+    //     },
+    // }, firstSymbolId2);
+
+    // map.addLayer({
+    //     'id': 'Flickr Density',
+    //     'type': 'line',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190726_FLICKR_DATA_GREATERTHAN1.geojson'
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'visible'
+    //     },
+    //     'paint': {
+    //         'fill-color': '#ffffE2',
+    //         'fill-opacity': 0.7,
+    //         // 'line-color': '#5DADE2',
+    //         // 'line-width': 1.5
+    //     },
+    // });
+
+
+
+
+    map.addSource('contours', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-terrain-v2'
+    });
+    map.addLayer({
+        'id': 'Contour Lines',
+        'type': 'line',
+        'source': 'contours',
+        'source-layer': 'contour',
+        'layout': {
+            'visibility': 'none',
+            'line-join': 'round',
+            'line-cap': 'round'
+        },
+        'paint': {
+            'line-color': '#877b59',
+            'line-width': 1
+        }
+    });
+});
+
+var toggleableLayerIds =
+  [
+    'Model 1: Base Model',
+    'Model 2: Proximity Model',
+    'Model 3: Prediction 2050 - No Zoning',
+    // 'Pipeline Data',
+    'Supervisor District',
+    'Liquefaction Zones',
+    'Zoned as Industrial',
+    // 'Zoned as Residential',
+    'Contour Lines',
+    'Flickr Density'
+  ];
+
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+    var id = toggleableLayerIds[i];
+
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = id;
+
+    link.onclick = function (e) {
+        var clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
+
+        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+        if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.className = '';
+        } else {
+            this.className = 'active';
+            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        }
+    };
+
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+
+</script>
+
+</body>
+</html>
