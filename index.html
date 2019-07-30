@@ -336,6 +336,28 @@ map.on('load', function () {
         },
     });
 
+    //add popup to the neighborhoods population density
+    map.on('click', 'Population Density', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          // "<strong>Population</strong>"
+          "Neighborhood: "
+          + "<strong>"
+          + e.features[0].properties.name
+          + "</strong>"
+          + "<br>"
+          + "Population Density: "
+          + "<strong>"
+          + e.features[0].properties._mean.toFixed(0)
+          + "</strong>"
+          + " per sq mi"
+        )
+        .addTo(map);
+    });
+
+
+
     //add the M1 predicted YES parcels based on Logistic Regression algorithm:
 
     var firstSymbolId1;
