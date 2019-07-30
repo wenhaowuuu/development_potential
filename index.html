@@ -137,6 +137,7 @@ var map = new mapboxgl.Map({
 });
 
 
+
 //THIS FOLLOWING CODE CREATE PROBLEM FOR RENDERING THE TOGGLE BUTTONS:
 // $('#remover').click(function(){
 //   $('#map').hide();
@@ -215,6 +216,33 @@ map.on('load', function () {
     //
     // });
 
+    // map.addLayer({
+    //     'id': 'Supervisor District',
+    //     'type': 'line',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'none'
+    //     },
+    //     'paint': {
+    //         // 'fill-color': '#5DADE2',
+    //         // 'fill-opacity': 0.1,
+    //         'line-color': '#5DADE2',
+    //         'line-width': 1.5
+    //     },
+    // });
+
+    var firstSymbolId4;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId4 = layers[i].id;
+        break;
+        }
+      }
+
     map.addLayer({
         'id': 'Supervisor District',
         'type': 'line',
@@ -227,10 +255,84 @@ map.on('load', function () {
             'visibility': 'none'
         },
         'paint': {
-            // 'fill-color': '#5DADE2',
-            // 'fill-opacity': 0.1,
+            // 'fill-color': 'rgba(87, 94, 98, 0.6)',
+            // 'fill-outline-color': 'rgba(36, 68, 89, 1)'
+
+            // '#5DADE2',
+            // 'fill-opacity': 0.05,
+
             'line-color': '#5DADE2',
             'line-width': 1.5
+        },
+    },
+  firstSymbolId4);
+
+
+
+    map.on('click', 'Supervisor District', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          "District: "
+          + "<strong>"
+          + e.features[0].properties.supervisor
+          + "</strong>"
+          + "<br>"
+          + "Name: "
+          + "<strong>"
+          + e.features[0].properties.supname)
+        .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the states layer.
+    map.on('mouseenter', 'states-layer', function () {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'states-layer', function () {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    //ADD THE POP DENSITY FOR EACH NEIGHBORHOODS IN 3D VIEW:
+    map.addLayer({
+        'id': 'Population Density',
+        'type': 'fill-extrusion',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190730_NHBHD_POPDENS_NEW_COLOR.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            'fill-extrusion-color': [
+                'match',
+                ['get', 'RANGE'],
+                1, '#ffffcc',
+                2, '#c7e9b4',
+                3, '#7fcdbb',
+                4, '#41b6c4',
+                5, '#2c7fb8',
+                6, '#253494',
+                '#FFFFFF'
+                // 1, '#FFCA28',
+                // 2, '#FF7043',
+                // 3, '#E53935',
+                // 4, '#990033',
+                // 5, '#880E4F',
+                // 6, '#330066',
+                // '#FFFFFF'
+            ],
+            // '#82E0AA',
+            'fill-extrusion-height': ['get', 'height_2'],
+            'fill-extrusion-base': 0,
+            'fill-extrusion-opacity': 0.6,
+
+            // 'line-color': '#F5F52D',
+            // 'line-width': 1.5
         },
     });
 
@@ -262,6 +364,26 @@ map.on('load', function () {
         },
     }, firstSymbolId1);
 
+    //add popup to the model 1 prediction parcels
+    map.on('click', 'Model 1: Base Model', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          "<strong>Model 1 Prediction</strong>"
+          + "<br>"
+          + "<br>"
+          + "Block-lot number: "
+          + "<strong>"
+          + e.features[0].properties.BLKLT
+          + "</strong>"
+          + "<br>"
+          + "Development Probability: "
+          + "<strong>"
+          + (e.features[0].properties.Predicti_2 * 100).toFixed(2)
+          + "%")
+        .addTo(map);
+    });
+
 
     //add the M2 predicted YES parcels based on Logistic Regression algorithm:
 
@@ -290,6 +412,26 @@ map.on('load', function () {
             // 'line-width': 1.5
         },
     }, firstSymbolId2);
+
+    //add popup to the model 2 prediction parcels
+    map.on('click', 'Model 2: Proximity Model', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          "<strong>Model 2 Prediction</strong>"
+          + "<br>"
+          + "<br>"
+          + "Block-lot number: "
+          + "<strong>"
+          + e.features[0].properties.BLKLT
+          + "</strong>"
+          + "<br>"
+          + "Development Probability: "
+          + "<strong>"
+          + (e.features[0].properties.Predicti_2 * 100).toFixed(2)
+          + "%")
+        .addTo(map);
+    });
 
 
 
@@ -369,39 +511,43 @@ map.on('load', function () {
 
 
 
-    map.addSource('contours', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-terrain-v2'
-    });
-    map.addLayer({
-        'id': 'Contour Lines',
-        'type': 'line',
-        'source': 'contours',
-        'source-layer': 'contour',
-        'layout': {
-            'visibility': 'none',
-            'line-join': 'round',
-            'line-cap': 'round'
-        },
-        'paint': {
-            'line-color': '#877b59',
-            'line-width': 1
-        }
-    });
+    // map.addSource('contours', {
+    //     type: 'vector',
+    //     url: 'mapbox://mapbox.mapbox-terrain-v2'
+    // });
+    // map.addLayer({
+    //     'id': 'Contour Lines',
+    //     'type': 'line',
+    //     'source': 'contours',
+    //     'source-layer': 'contour',
+    //     'layout': {
+    //         'visibility': 'none',
+    //         'line-join': 'round',
+    //         'line-cap': 'round'
+    //     },
+    //     'paint': {
+    //         'line-color': '#877b59',
+    //         'line-width': 1
+    //     }
+    // });
+
+
 });
 
 var toggleableLayerIds =
   [
+    // 'Pipeline Dataset',
     'Model 1: Base Model',
     'Model 2: Proximity Model',
-    'Model 3: Prediction 2050 - No Zoning',
+    // 'Model 3: Prediction 2050 - No Zoning',
     // 'Pipeline Data',
     'Supervisor District',
     'Liquefaction Zones',
     'Zoned as Industrial',
+    'Population Density'
     // 'Zoned as Residential',
-    'Contour Lines',
-    'Flickr Density'
+    // 'Contour Lines',
+    // 'Flickr Density'
   ];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
