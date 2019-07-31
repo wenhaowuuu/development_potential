@@ -101,6 +101,54 @@
       right:0;
     }
 
+    h2,h3 {
+      margin: 10px;
+      font-size: 1.2em;
+    }
+
+    p {
+  font-size: 0.85em;
+  margin: 10px;
+  text-align: left;
+}
+
+    .map-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.7);
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#features {
+  top: 8px;
+  right: 160px;
+  height: 180px;
+  margin-top: 20px;
+  width: 360px;
+}
+
+#legend {
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 150px;
+  margin-bottom: 40px;
+  width: 120px;
+}
+
+.legend-key {
+  display: inline-block;
+  border-radius: 20%;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+
 </style>
 
 <div id = "header" style="font-family: Arial;
@@ -114,12 +162,19 @@ font-weight: bolder;">
 <nav id="menu"></nav>
 
 <div id="map"></div>
+
+<div class='map-overlay' id='features'><h2>Development Potential in SF</h2>
+<div id='pd'><br><p>This map presents the findings of the Y1 Machine Learning Group, on predicting develop potential on a property-by-property basis using Machine Learning method.</p></div></div>
+<div class='map-overlay' id='legend'></div>
+
 <!-- <div id="map0"></div> -->
 
 <!-- <div id='remover'>Satellite</div> -->
 
 
 <script>
+// map.getCanvas().style.cursor = 'default';
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuaGFvYnJpYW4iLCJhIjoiY2owaXNrNzhnMDB4ZjJxdGoxdHdkd2VibiJ9.Cn_2Ypo7UctdNZHt6OlDHA';
 // var map0 = new mapboxgl.Map({
 //     container: 'map',
@@ -357,6 +412,127 @@ map.on('load', function () {
     });
 
 
+    //ADD LEGEND FOR THE POPULATION DENSITY
+    var layers = ['0-3000', '3000-6000', '6000-9000', '9000-12000', '12000-36000', '>36000'];
+    var colors = [
+      '#ffffcc',
+      '#c7e9b4',
+      '#7fcdbb',
+      '#41b6c4',
+      '#2c7fb8',
+      '#253494'
+    ];
+
+    for (i = 0; i < layers.length; i++) {
+      var layer = layers[i];
+      var color = colors[i];
+      var item = document.createElement('div');
+      var key = document.createElement('span');
+      key.className = 'legend-key';
+      key.style.backgroundColor = color;
+
+      var value = document.createElement('span');
+      value.innerHTML = layer;
+      item.appendChild(key);
+      item.appendChild(value);
+      legend.appendChild(item);
+    }
+
+
+    //ADD THE SOM DESIGNED BUILDINGS IN SF DOWNTOWN
+    // var SOM_url = "https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190730_SOM_BLDG_SFDT.geojson";
+    // $(document).ready(function() {
+    //           $.ajax(SOM_url).done(function(data) {
+    //             var parsedadptdata = JSON.parse(data);
+    //             console.log("SOM towers parsed");
+    //             var layerMappedMarkers = L.geoJson(parsedadptdata,
+    //               {
+    //                 pointToLayer: function (feature, latlng) {
+    //                   return new L.Marker(latlng, {
+    //                     icon:
+    //                         new L.icon({
+    //                         iconUrl: 'https://raw.githubusercontent.com/wenhaowuuu/houseplusmap/master/house-icon-s.png',
+    //                         // iconUrl: 'https://image.ibb.co/h1dYFk/city_icons_01.png',
+    //                         iconSize:     [15, 15],
+    //                         shadowSize:   [10, 10],
+    //                         iconAnchor:   [20, 20],
+    //                     })
+    //                   })
+    //
+    //                   // .bindTooltip(feature.properties.Name + ': ' + feature.properties.Designatio);
+    //
+    //                   .bindTooltip(
+    //                                "<b>Name: </b>" +
+    //                                feature.properties.Project_Na +
+    //                                "</br>" +
+    //
+    //                                "<b>Year: </b>" +
+    //                                feature.properties.Year +
+    //                                "</br>"
+    //
+    //                              ).bindPopup(
+    //                                "<b>Name: </b>" +
+    //                                feature.properties.Project_Na +
+    //                                "</br>" +
+    //
+    //                                "</br><a class='btn btn-light my-2 my-sm-0' style='font-size:12px;' href='https://www.cityofpaloalto.org/civicax/filebank/documents/8700';return true;'>Learn more</a>"
+    //
+    //                              );
+    //
+    //               }
+    //             }).addTo(map);
+    //           });
+    //       // });
+    //
+    //
+    //     }
+    //   );
+
+
+    // map.addLayer({
+    //     'id': 'SOM Towers',
+    //     'type': 'symbol',
+    //     'source': {
+    //           'type': 'geojson',
+    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190730_SOM_BLDG_SFDT.geojson',
+    //           'properties': {
+    //             'marker-color': '#3bb2d0',
+    //             'marker-size': 'large',
+    //             'marker-symbol': 'rocket'
+    //           }
+    //     },
+    //
+    //     'layout': {
+    //         'visibility': 'visible'
+    //     }
+    //     // 'paint': {
+    //     //     'line-color': '#5DADE2',
+    //     //     'line-width': 1.5
+    //     // },
+    // });
+
+    // map.on('click', 'SOM Towers', function(e) {
+    //   new mapboxgl.Popup()
+    //     .setLngLat(e.lngLat)
+    //     .setHTML(
+    //       "District: "
+    //       + "<strong>"
+    //       + e.features[0].properties.Project_Na
+    //       + "</strong>"
+    //       + "<br>"
+    //       + "Year: "
+    //       + "<strong>"
+    //       + e.features[0].properties.Year
+    //       + "<br>"
+    //       + "Awards: "
+    //       + "<strong>"
+    //       + e.features[0].properties.Awards
+    //       + "</strong>"
+    //     )
+    //     .addTo(map);
+    // });
+
+
 
     //add the M1 predicted YES parcels based on Logistic Regression algorithm:
 
@@ -558,15 +734,18 @@ map.on('load', function () {
 
 var toggleableLayerIds =
   [
+    'MACHINE LEARNING RESULT',
     // 'Pipeline Dataset',
     'Model 1: Base Model',
     'Model 2: Proximity Model',
     // 'Model 3: Prediction 2050 - No Zoning',
     // 'Pipeline Data',
+    'SUPPLEMENTAL INFO',
     'Supervisor District',
     'Liquefaction Zones',
     'Zoned as Industrial',
     'Population Density'
+    // 'SOM Towers'
     // 'Zoned as Residential',
     // 'Contour Lines',
     // 'Flickr Density'
