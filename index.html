@@ -126,9 +126,9 @@
 #features {
   top: 8px;
   right: 160px;
-  height: 180px;
+  height: 16%;
   margin-top: 20px;
-  width: 360px;
+  width: 15%;
 }
 
 #legend {
@@ -163,8 +163,8 @@ font-weight: bolder;">
 
 <div id="map"></div>
 
-<div class='map-overlay' id='features'><h2>Development Potential in SF</h2>
-<div id='pd'><br><p>This map presents the findings of the Y1 Machine Learning Group, on predicting develop potential on a property-by-property basis using Machine Learning method.</p></div></div>
+<div class='map-overlay' id='features'><h4><h3>Year One Machine Learning Map</h3> <h4>&nbsp Parcel Development Susceptibility</h4>
+<div id='pd'><p>This map visualizes properties predicted to be susceptible to future re-development in San Francisco. The two models were trained against the last decade of development pipeline data.</p></div></div>
 <div class='map-overlay' id='legend'></div>
 
 <!-- <div id="map0"></div> -->
@@ -413,8 +413,9 @@ map.on('load', function () {
 
 
     //ADD LEGEND FOR THE POPULATION DENSITY
-    var layers = ['0-3000', '3000-6000', '6000-9000', '9000-12000', '12000-36000', '>36000'];
+    var layers = ['Susceptible to Development','0-3000', '3000-6000', '6000-9000', '9000-12000', '12000-36000', '>36000'];
     var colors = [
+      '#E74C3C',
       '#ffffcc',
       '#c7e9b4',
       '#7fcdbb',
@@ -544,7 +545,7 @@ map.on('load', function () {
         }
       }
     map.addLayer({
-        'id': 'Model 1: Base Model',
+        'id': 'Model 1: Pipeline Data',
         'type': 'fill',
         'source': {
               'type': 'geojson',
@@ -563,7 +564,7 @@ map.on('load', function () {
     }, firstSymbolId1);
 
     //add popup to the model 1 prediction parcels
-    map.on('click', 'Model 1: Base Model', function(e) {
+    map.on('click', 'Model 1: Pipeline Data', function(e) {
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
@@ -593,7 +594,7 @@ map.on('load', function () {
         }
       }
     map.addLayer({
-        'id': 'Model 2: Proximity Model',
+        'id': 'Model 2: Proximity Data',
         'type': 'fill',
         'source': {
               'type': 'geojson',
@@ -612,7 +613,7 @@ map.on('load', function () {
     }, firstSymbolId2);
 
     //add popup to the model 2 prediction parcels
-    map.on('click', 'Model 2: Proximity Model', function(e) {
+    map.on('click', 'Model 2: Proximity Data', function(e) {
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
@@ -734,13 +735,13 @@ map.on('load', function () {
 
 var toggleableLayerIds =
   [
-    'MACHINE LEARNING RESULT',
+    '',
     // 'Pipeline Dataset',
-    'Model 1: Base Model',
-    'Model 2: Proximity Model',
+    'Model 1: Pipeline Data',
+    'Model 2: Proximity Data',
     // 'Model 3: Prediction 2050 - No Zoning',
     // 'Pipeline Data',
-    'SUPPLEMENTAL INFO',
+    '',
     'Supervisor District',
     'Liquefaction Zones',
     'Zoned as Industrial',
