@@ -187,7 +187,7 @@ var map = new mapboxgl.Map({
     container: 'map',
     // style: 'mapbox://styles/wenhaobrian/cjygvkpdg0ugy1dl5jhx3wnln',
     // style: 'mapbox://styles/wenhaobrian/cjykdqc1t0tti1cnw8mmvr4n4',
-    style: 'mapbox://styles/wenhaobrian/ck0ytfpm70oad1cp862wxpmzh',   
+    style: 'mapbox://styles/wenhaobrian/ck0ytfpm70oad1cp862wxpmzh',
     zoom: 12,
     center: [-122.404684,37.783488]
 });
@@ -225,120 +225,352 @@ map.on('load', function () {
   //put the layers beneath the symbols
   //reference: https://docs.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
   var layers = map.getStyle().layers;
-  // Find the index of the first symbol layer in the map style
-  var firstSymbolId;
+
+  //the existing pipeline Data in the past 2012 - 2019
+  //2012
+  var firstSymbolId1;
   for (var i = 0; i < layers.length; i++) {
     if (layers[i].type === 'symbol') {
-      firstSymbolId = layers[i].id;
+      firstSymbolId1 = layers[i].id;
       break;
       }
     }
+  map.addLayer({
+      'id': '2012 Q1 Pipeline',
+      'type': 'circle',
+      'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/SF%20Development%20Pipeline%202012%20Q1.geojson'
+      },
 
-    map.addLayer({
-        'id': 'Liquefaction Zones',
-        'type': 'fill',
-        'source': {
-              'type': 'geojson',
-              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/San%20Francisco%20Seismic%20Hazard%20Zones.geojson'
-        },
+      'layout': {
+          'visibility': 'none'
+      },
+      'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
 
-        'layout': {
-            'visibility': 'none'
-        },
-        'paint': {
-            'fill-color': '#FC6300',
-            'fill-opacity': 0.4
+      },
+  }, firstSymbolId1);
 
-        },
-        // 'source-layer': 'museum-cusco'
-    }, firstSymbolId);
+  //add popup to the model 1 prediction parcels
+  map.on('click', '2012 Q1 Pipeline', function(e) {
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        "<strong>2012 Q1</strong>"
+        + "<br>"
+        + "<br>"
+        + "Block-lot number: "
+        + "<strong>"
+        + e.features[0].properties.block_lot
+        + "</strong>"
+        + "<br>"
+        + "Address: "
+        + "<strong>"
+        + e.features[0].properties.location_1_address
+        + "</strong>"
+        + "<br>"
+        + "Zoning: "
+        + "<strong>"
+        + e.features[0].properties.zoning
+        + "</strong>"
+        + "<br>"
+        + "Land Use: "
+        + "<strong>"
+        + e.features[0].properties.landuse
+        + "</strong>"
+        + "<br>"
+        + "Project Date: "
+        + "<strong>"
+        + e.features[0].properties.project_date.substr(0,10)
+        + "</strong>"
+        + "<br>"
+        + "Height Limit: "
+        + "<strong>"
+        + e.features[0].properties.heightlimit
+        + "</strong>"
+      )
+      .addTo(map);
+  });
 
 
-    // map.addLayer({
-    //     'id': 'Pipeline Data',
-    //     'type': 'fill',
-    //     'source': {
-    //           'type': 'geojson',
-    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
-    //     },
-    //
-    //     'layout': {
-    //         'visibility': 'visible'
-    //     },
-    //     'paint': {
-    //       'fill-color': '#5DADE2',
-    //       'fill-opacity': 0.1
-    //     },
-    //
-    // });
-
-    // map.addLayer({
-    //     'id': 'Supervisor District',
-    //     'type': 'line',
-    //     'source': {
-    //           'type': 'geojson',
-    //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
-    //     },
-    //
-    //     'layout': {
-    //         'visibility': 'none'
-    //     },
-    //     'paint': {
-    //         // 'fill-color': '#5DADE2',
-    //         // 'fill-opacity': 0.1,
-    //         'line-color': '#5DADE2',
-    //         'line-width': 1.5
-    //     },
-    // });
-
-    var firstSymbolId4;
-    for (var i = 0; i < layers.length; i++) {
-      if (layers[i].type === 'symbol') {
-        firstSymbolId4 = layers[i].id;
-        break;
-        }
+  //2014
+  var firstSymbolId2;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId1 = layers[i].id;
+      break;
       }
+    }
+  map.addLayer({
+      'id': '2014 Q1 Pipeline',
+      'type': 'circle',
+      'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/SF%20Development%20Pipeline%202014%20Q1.geojson'
+      },
 
-    map.addLayer({
-        'id': 'Supervisor District',
-        'type': 'line',
-        'source': {
-              'type': 'geojson',
-              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
-        },
+      'layout': {
+          'visibility': 'none'
+      },
+      'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
 
-        'layout': {
-            'visibility': 'none'
-        },
-        'paint': {
-            // 'fill-color': 'rgba(87, 94, 98, 0.6)',
-            // 'fill-outline-color': 'rgba(36, 68, 89, 1)'
+      },
+  }, firstSymbolId2);
 
-            // '#5DADE2',
-            // 'fill-opacity': 0.05,
+  //add popup to the model 1 prediction parcels
+  map.on('click', '2014 Q1 Pipeline', function(e) {
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        "<strong>2014 Q1</strong>"
+        + "<br>"
+        + "<br>"
+        + "Block-lot number: "
+        + "<strong>"
+        + e.features[0].properties.block_lot
+        + "</strong>"
+        + "<br>"
+        + "Address: "
+        + "<strong>"
+        + e.features[0].properties.location_1_address
+        + "</strong>"
+        + "<br>"
+        + "Zoning: "
+        + "<strong>"
+        + e.features[0].properties.zoning
+        + "</strong>"
+        + "<br>"
+        + "Land Use: "
+        + "<strong>"
+        + e.features[0].properties.landuse
+        + "</strong>"
+        + "<br>"
+        + "Project Date: "
+        + "<strong>"
+        + e.features[0].properties.project_date.substr(0,10)
+        + "</strong>"
+        + "<br>"
+        + "Height Limit: "
+        + "<strong>"
+        + e.features[0].properties.heightlimit
+        + "</strong>"
+      )
+      .addTo(map);
+  });
 
-            'line-color': '#5DADE2',
-            'line-width': 1.5
-        },
-    },
-  firstSymbolId4);
+
+  //2016
+  var firstSymbolId3;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId3 = layers[i].id;
+      break;
+      }
+    }
+  map.addLayer({
+      'id': '2016 Q1 Pipeline',
+      'type': 'circle',
+      'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/SF%20Development%20Pipeline%202016%20Q1.geojson'
+      },
+
+      'layout': {
+          'visibility': 'none'
+      },
+      'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
+
+      },
+  }, firstSymbolId3);
+
+  //add popup to the model 1 prediction parcels
+  map.on('click', '2016 Q1 Pipeline', function(e) {
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        "<strong>2016 Q1</strong>"
+        + "<br>"
+        + "<br>"
+        + "Block-lot number: "
+        + "<strong>"
+        + e.features[0].properties.block_lot
+        + "</strong>"
+        + "<br>"
+        + "Address: "
+        + "<strong>"
+        + e.features[0].properties.location_1_address
+        + "</strong>"
+        + "<br>"
+        + "Zoning: "
+        + "<strong>"
+        + e.features[0].properties.zoning
+        + "</strong>"
+        + "<br>"
+        + "Land Use: "
+        + "<strong>"
+        + e.features[0].properties.landuse
+        + "</strong>"
+        + "<br>"
+        + "Project Date: "
+        + "<strong>"
+        + e.features[0].properties.project_date.substr(0,10)
+        + "</strong>"
+        + "<br>"
+        + "Height Limit: "
+        + "<strong>"
+        + e.features[0].properties.heightlimit
+        + "</strong>"
+      )
+      .addTo(map);
+  });
+
+
+  //2018
+  var firstSymbolId4;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId4 = layers[i].id;
+      break;
+      }
+    }
+  map.addLayer({
+      'id': '2018 Q1 Pipeline',
+      'type': 'circle',
+      'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/SF%20Development%20Pipeline%202018%20Q1.geojson'
+      },
+
+      'layout': {
+          'visibility': 'none'
+      },
+      'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
+
+      },
+  }, firstSymbolId4);
+
+  //add popup to the model 1 prediction parcels
+  map.on('click', '2018 Q1 Pipeline', function(e) {
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        "<strong>2018 Q1</strong>"
+        + "<br>"
+        + "<br>"
+        + "Block-lot number: "
+        + "<strong>"
+        + e.features[0].properties.block_lot
+        + "</strong>"
+        + "<br>"
+        + "Address: "
+        + "<strong>"
+        + e.features[0].properties.location_1_address
+        + "</strong>"
+        + "<br>"
+        + "Zoning: "
+        + "<strong>"
+        + e.features[0].properties.zoning
+        + "</strong>"
+        + "<br>"
+        + "Land Use: "
+        + "<strong>"
+        + e.features[0].properties.landuse
+        + "</strong>"
+        + "<br>"
+        + "Project Date: "
+        + "<strong>"
+        + e.features[0].properties.project_date.substr(0,10)
+        + "</strong>"
+        + "<br>"
+        + "Height Limit: "
+        + "<strong>"
+        + e.features[0].properties.heightlimit
+        + "</strong>"
+      )
+      .addTo(map);
+  });
+
+
+  //2018
+  var firstSymbolId5;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === 'symbol') {
+      firstSymbolId5 = layers[i].id;
+      break;
+      }
+    }
+  map.addLayer({
+      'id': '2019 Q1 Pipeline',
+      'type': 'circle',
+      'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/SF%20Development%20Pipeline%202018%20Q1.geojson'
+      },
+
+      'layout': {
+          'visibility': 'none'
+      },
+      'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
+
+      },
+  }, firstSymbolId5);
+
+  //add popup to the model 1 prediction parcels
+  map.on('click', '2019 Q1 Pipeline', function(e) {
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        "<strong>2019 Q1</strong>"
+        + "<br>"
+        + "<br>"
+        + "Block-lot number: "
+        + "<strong>"
+        + e.features[0].properties.block_lot
+        + "</strong>"
+        + "<br>"
+        + "Address: "
+        + "<strong>"
+        + e.features[0].properties.location_1_address
+        + "</strong>"
+        + "<br>"
+        + "Zoning: "
+        + "<strong>"
+        + e.features[0].properties.zoning
+        + "</strong>"
+        + "<br>"
+        + "Land Use: "
+        + "<strong>"
+        + e.features[0].properties.landuse
+        + "</strong>"
+        + "<br>"
+        + "Project Date: "
+        + "<strong>"
+        + e.features[0].properties.project_date.substr(0,10)
+        + "</strong>"
+        + "<br>"
+        + "Height Limit: "
+        + "<strong>"
+        + e.features[0].properties.heightlimit
+        + "</strong>"
+      )
+      .addTo(map);
+  });
 
 
 
-    map.on('click', 'Supervisor District', function(e) {
-      new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(
-          "District: "
-          + "<strong>"
-          + e.features[0].properties.supervisor
-          + "</strong>"
-          + "<br>"
-          + "Name: "
-          + "<strong>"
-          + e.features[0].properties.supname)
-        .addTo(map);
-    });
+
+
+
 
     // Change the cursor to a pointer when the mouse is over the states layer.
     map.on('mouseenter', 'states-layer', function () {
@@ -351,94 +583,7 @@ map.on('load', function () {
     });
 
 
-    //ADD THE POP DENSITY FOR EACH NEIGHBORHOODS IN 3D VIEW:
-    map.addLayer({
-        'id': 'Population Density',
-        'type': 'fill-extrusion',
-        'source': {
-              'type': 'geojson',
-              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190730_NHBHD_POPDENS_NEW_COLOR.geojson'
-        },
 
-        'layout': {
-            'visibility': 'none'
-        },
-        'paint': {
-            'fill-extrusion-color': [
-                'match',
-                ['get', 'RANGE'],
-                1, '#ffffcc',
-                2, '#c7e9b4',
-                3, '#7fcdbb',
-                4, '#41b6c4',
-                5, '#2c7fb8',
-                6, '#253494',
-                '#FFFFFF'
-                // 1, '#FFCA28',
-                // 2, '#FF7043',
-                // 3, '#E53935',
-                // 4, '#990033',
-                // 5, '#880E4F',
-                // 6, '#330066',
-                // '#FFFFFF'
-            ],
-            // '#82E0AA',
-            'fill-extrusion-height': ['get', 'height_2'],
-            'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.6,
-
-            // 'line-color': '#F5F52D',
-            // 'line-width': 1.5
-        },
-    });
-
-    //add popup to the neighborhoods population density
-    map.on('click', 'Population Density', function(e) {
-      new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(
-          // "<strong>Population</strong>"
-          "Neighborhood: "
-          + "<strong>"
-          + e.features[0].properties.name
-          + "</strong>"
-          + "<br>"
-          + "Population Density: "
-          + "<strong>"
-          + e.features[0].properties._mean.toFixed(0)
-          + "</strong>"
-          + " per sq mi"
-        )
-        .addTo(map);
-    });
-
-
-    //ADD LEGEND FOR THE POPULATION DENSITY
-    var layers = ['Susceptible to Development','0-3000', '3000-6000', '6000-9000', '9000-12000', '12000-36000', '>36000'];
-    var colors = [
-      '#E74C3C',
-      '#ffffcc',
-      '#c7e9b4',
-      '#7fcdbb',
-      '#41b6c4',
-      '#2c7fb8',
-      '#253494'
-    ];
-
-    for (i = 0; i < layers.length; i++) {
-      var layer = layers[i];
-      var color = colors[i];
-      var item = document.createElement('div');
-      var key = document.createElement('span');
-      key.className = 'legend-key';
-      key.style.backgroundColor = color;
-
-      var value = document.createElement('span');
-      value.innerHTML = layer;
-      item.appendChild(key);
-      item.appendChild(value);
-      legend.appendChild(item);
-    }
 
 
     //ADD THE SOM DESIGNED BUILDINGS IN SF DOWNTOWN
@@ -538,10 +683,10 @@ map.on('load', function () {
 
     //add the M1 predicted YES parcels based on Logistic Regression algorithm:
 
-    var firstSymbolId1;
+    var firstSymbolId5;
     for (var i = 0; i < layers.length; i++) {
       if (layers[i].type === 'symbol') {
-        firstSymbolId1 = layers[i].id;
+        firstSymbolId5 = layers[i].id;
         break;
         }
       }
@@ -562,7 +707,7 @@ map.on('load', function () {
             // 'line-color': '#5gg8f2',
             // 'line-width': 1.5
         },
-    }, firstSymbolId1);
+    }, firstSymbolId5);
 
     //add popup to the model 1 prediction parcels
     map.on('click', 'Model 1: Pipeline Data', function(e) {
@@ -587,10 +732,10 @@ map.on('load', function () {
 
     //add the M2 predicted YES parcels based on Logistic Regression algorithm:
 
-    var firstSymbolId2;
+    var firstSymbolId6;
     for (var i = 0; i < layers.length; i++) {
       if (layers[i].type === 'symbol') {
-        firstSymbolId2 = layers[i].id;
+        firstSymbolId6 = layers[i].id;
         break;
         }
       }
@@ -611,7 +756,7 @@ map.on('load', function () {
             // 'line-color': '#5gg8f2',
             // 'line-width': 1.5
         },
-    }, firstSymbolId2);
+    }, firstSymbolId6);
 
     //add popup to the model 2 prediction parcels
     map.on('click', 'Model 2: Proximity Data', function(e) {
@@ -635,10 +780,127 @@ map.on('load', function () {
 
 
 
-    var firstSymbolId3;
+
+
+    // Find the index of the first symbol layer in the map style
+    var firstSymbolId8;
     for (var i = 0; i < layers.length; i++) {
       if (layers[i].type === 'symbol') {
-        firstSymbolId3 = layers[i].id;
+        firstSymbolId8 = layers[i].id;
+        break;
+        }
+      }
+
+      map.addLayer({
+          'id': 'Liquefaction Zones',
+          'type': 'fill',
+          'source': {
+                'type': 'geojson',
+                'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/San%20Francisco%20Seismic%20Hazard%20Zones.geojson'
+          },
+
+          'layout': {
+              'visibility': 'none'
+          },
+          'paint': {
+              'fill-color': '#FC6300',
+              'fill-opacity': 0.4
+
+          },
+          // 'source-layer': 'museum-cusco'
+      }, firstSymbolId8);
+
+
+      // map.addLayer({
+      //     'id': 'Pipeline Data',
+      //     'type': 'fill',
+      //     'source': {
+      //           'type': 'geojson',
+      //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+      //     },
+      //
+      //     'layout': {
+      //         'visibility': 'visible'
+      //     },
+      //     'paint': {
+      //       'fill-color': '#5DADE2',
+      //       'fill-opacity': 0.1
+      //     },
+      //
+      // });
+
+      // map.addLayer({
+      //     'id': 'Supervisor District',
+      //     'type': 'line',
+      //     'source': {
+      //           'type': 'geojson',
+      //           'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+      //     },
+      //
+      //     'layout': {
+      //         'visibility': 'none'
+      //     },
+      //     'paint': {
+      //         // 'fill-color': '#5DADE2',
+      //         // 'fill-opacity': 0.1,
+      //         'line-color': '#5DADE2',
+      //         'line-width': 1.5
+      //     },
+      // });
+
+      var firstSymbolId7;
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol') {
+          firstSymbolId7 = layers[i].id;
+          break;
+          }
+        }
+
+      map.addLayer({
+          'id': 'Supervisor District',
+          'type': 'line',
+          'source': {
+                'type': 'geojson',
+                'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/Current%20Supervisor%20Districts.geojson'
+          },
+
+          'layout': {
+              'visibility': 'none'
+          },
+          'paint': {
+              // 'fill-color': 'rgba(87, 94, 98, 0.6)',
+              // 'fill-outline-color': 'rgba(36, 68, 89, 1)'
+
+              // '#5DADE2',
+              // 'fill-opacity': 0.05,
+
+              'line-color': '#5DADE2',
+              'line-width': 1.5
+          },
+      },
+    firstSymbolId7);
+
+
+
+      map.on('click', 'Supervisor District', function(e) {
+        new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(
+            "District: "
+            + "<strong>"
+            + e.features[0].properties.supervisor
+            + "</strong>"
+            + "<br>"
+            + "Name: "
+            + "<strong>"
+            + e.features[0].properties.supname)
+          .addTo(map);
+      });
+
+    var firstSymbolId9;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId9 = layers[i].id;
         break;
         }
       }
@@ -659,7 +921,102 @@ map.on('load', function () {
             // 'line-color': '#5gg8f2',
             // 'line-width': 1.5
         },
-    }, firstSymbolId3);
+    }, firstSymbolId9);
+
+
+
+    //ADD THE POP DENSITY FOR EACH NEIGHBORHOODS IN 3D VIEW:
+    map.addLayer({
+        'id': 'Population Density',
+        'type': 'fill-extrusion',
+        'source': {
+              'type': 'geojson',
+              'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/master/layer_data/20190730_NHBHD_POPDENS_NEW_COLOR.geojson'
+        },
+
+        'layout': {
+            'visibility': 'none'
+        },
+        'paint': {
+            'fill-extrusion-color': [
+                'match',
+                ['get', 'RANGE'],
+                1, '#ffffcc',
+                2, '#c7e9b4',
+                3, '#7fcdbb',
+                4, '#41b6c4',
+                5, '#2c7fb8',
+                6, '#253494',
+                '#FFFFFF'
+                // 1, '#FFCA28',
+                // 2, '#FF7043',
+                // 3, '#E53935',
+                // 4, '#990033',
+                // 5, '#880E4F',
+                // 6, '#330066',
+                // '#FFFFFF'
+            ],
+            // '#82E0AA',
+            'fill-extrusion-height': ['get', 'height_2'],
+            'fill-extrusion-base': 0,
+            'fill-extrusion-opacity': 0.6,
+
+            // 'line-color': '#F5F52D',
+            // 'line-width': 1.5
+        },
+    });
+
+    //add popup to the neighborhoods population density
+    map.on('click', 'Population Density', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          // "<strong>Population</strong>"
+          "Neighborhood: "
+          + "<strong>"
+          + e.features[0].properties.name
+          + "</strong>"
+          + "<br>"
+          + "Population Density: "
+          + "<strong>"
+          + e.features[0].properties._mean.toFixed(0)
+          + "</strong>"
+          + " per sq mi"
+        )
+        .addTo(map);
+    });
+
+
+    //ADD LEGEND FOR THE POPULATION DENSITY
+    var layers = ['Susceptible to Development','0-3000', '3000-6000', '6000-9000', '9000-12000', '12000-36000', '>36000'];
+    var colors = [
+      '#E74C3C',
+      '#ffffcc',
+      '#c7e9b4',
+      '#7fcdbb',
+      '#41b6c4',
+      '#2c7fb8',
+      '#253494'
+    ];
+
+    for (i = 0; i < layers.length; i++) {
+      var layer = layers[i];
+      var color = colors[i];
+      var item = document.createElement('div');
+      var key = document.createElement('span');
+      key.className = 'legend-key';
+      key.style.backgroundColor = color;
+
+      var value = document.createElement('span');
+      value.innerHTML = layer;
+      item.appendChild(key);
+      item.appendChild(value);
+      legend.appendChild(item);
+    }
+
+
+
+
 
     // Seems that any data larger than 1MB cannot be hosted directly from Github and thus, you can not render them on the webpage.
 
@@ -738,6 +1095,14 @@ var toggleableLayerIds =
   [
     '',
     // 'Pipeline Dataset',
+    '2012 Q1 Pipeline',
+    '2014 Q1 Pipeline',
+    '2016 Q1 Pipeline',
+    '2018 Q1 Pipeline',
+    '2019 Q1 Pipeline',
+    '',
+
+   // Model Prediction
     'Model 1: Pipeline Data',
     'Model 2: Proximity Data',
     // 'Model 3: Prediction 2050 - No Zoning',
