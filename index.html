@@ -154,10 +154,10 @@
 <div id = "header" style="font-family: Arial;
 font-size: 14px; color:#ffffff;
 font-weight: bolder;">
-     Predicting Parcel Development Susceptibility
+     Predicting Parcel Development Susceptibility in San Francisco
 </div>
 
-<!-- <div style="z-index:20;"> SOM | Year One Machine Learning Group Research </div> -->
+<!-- <div style="z-index:20;"> Machine Learning Group Research </div> -->
 
 <nav id="menu"></nav>
 
@@ -189,7 +189,9 @@ var map = new mapboxgl.Map({
     // style: 'mapbox://styles/wenhaobrian/cjykdqc1t0tti1cnw8mmvr4n4',
     // style: 'mapbox://styles/wenhaobrian/ck0ytfpm70oad1cp862wxpmzh',
     // below style adds the flickr analysis result:
-    style: 'mapbox://styles/wenhaobrian/ck5xezvrj12u91io8zjr4yqwl',
+    // style: 'mapbox://styles/wenhaobrian/ck5xezvrj12u91io8zjr4yqwl', //with flickr overlay
+    style: 'mapbox://styles/wenhaobrian/clnmquyvh00t001q11cx24nxf', //much lighter flickr overlay
+    // style: 'mapbox://styles/wenhaobrian/cjykdqc1t0tti1cnw8mmvr4n4', //without flickr raster overlay
     zoom: 12,
     center: [-122.404684,37.783488]
 });
@@ -227,6 +229,9 @@ map.on('load', function () {
   //put the layers beneath the symbols
   //reference: https://docs.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
   var layers = map.getStyle().layers;
+  
+  //TBD: make the flickr data layer separate
+
 
   //the existing pipeline Data in the past 2012 - 2019
   //2012
