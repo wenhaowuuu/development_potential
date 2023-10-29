@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "parcels_rf_pred_short_2023",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+"features": [
+
+]
+}
