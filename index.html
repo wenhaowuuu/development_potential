@@ -902,8 +902,7 @@ map.on('load', function () {
       },
     firstSymbolId7);
 
-
-
+    //add popup
       map.on('click', 'Supervisor District', function(e) {
         new mapboxgl.Popup()
           .setLngLat(e.lngLat)
@@ -918,6 +917,8 @@ map.on('load', function () {
             + e.features[0].properties.supname)
           .addTo(map);
       });
+
+
 
     var firstSymbolId9;
     for (var i = 0; i < layers.length; i++) {
@@ -1038,7 +1039,37 @@ map.on('load', function () {
 
 
 
+    //ADD TRANSPORTATION RELATED LAYERS
+    var firstSymbolId10;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId10 = layers[i].id;
+        break;
+        }
+      }
 
+    map.addLayer({
+        'id': 'Red Light Camera Citations',
+        'type': 'circle',
+        'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/refs/heads/master/layer_data/Count%20of%20Red%20Light%20Camera%20Citations%20by%20Intersection_20241207.geojson'
+        },
+        'layout': {
+          'visibility': 'none'
+        },
+        'paint': {
+            'circle-radius': [
+                'interpolate',
+                ['linear'],
+                ['get', 'citations_count'], // Replace 'citations_count' with the actual column name for size
+                0, 5,
+                100, 20
+            ],
+            'circle-color': '#E63946',
+            'circle-opacity': 0.8
+        }
+    }, firstSymbolId10);
 
     // Seems that any data larger than 1MB cannot be hosted directly from Github and thus, you can not render them on the webpage.
 
@@ -1090,25 +1121,25 @@ map.on('load', function () {
 
 
 
-    // map.addSource('contours', {
-    //     type: 'vector',
-    //     url: 'mapbox://mapbox.mapbox-terrain-v2'
-    // });
-    // map.addLayer({
-    //     'id': 'Contour Lines',
-    //     'type': 'line',
-    //     'source': 'contours',
-    //     'source-layer': 'contour',
-    //     'layout': {
-    //         'visibility': 'none',
-    //         'line-join': 'round',
-    //         'line-cap': 'round'
-    //     },
-    //     'paint': {
-    //         'line-color': '#877b59',
-    //         'line-width': 1
-    //     }
-    // });
+    map.addSource('contours', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-terrain-v2'
+    });
+    map.addLayer({
+        'id': 'Contour Lines',
+        'type': 'line',
+        'source': 'contours',
+        'source-layer': 'contour',
+        'layout': {
+            'visibility': 'none',
+            'line-join': 'round',
+            'line-cap': 'round'
+        },
+        'paint': {
+            'line-color': '#877b59',
+            'line-width': 1
+        }
+    });
 
 
 });
@@ -1133,10 +1164,12 @@ var toggleableLayerIds =
     'Supervisor District',
     'Liquefaction Zones',
     'Zoned as Industrial',
-    'Population Density (3D)'
+    'Population Density (3D)',
+    '',
     // 'SOM Towers'
     // 'Zoned as Residential',
-    // 'Contour Lines',
+    'Red Light Camera Citations',
+    'Contour Lines',
     // 'Flickr Density'
   ];
 
@@ -1148,7 +1181,8 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
     link.className = 'active';
     link.textContent = id;
 
-    link.onclick = function (e) {
+    if (link != '') {
+      link.onclick = function (e) {
         var clickedLayer = this.textContent;
         e.preventDefault();
         e.stopPropagation();
@@ -1162,7 +1196,9 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
             this.className = 'active';
             map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
         }
-    };
+      };
+    }
+    
 
     var layers = document.getElementById('menu');
     layers.appendChild(link);
