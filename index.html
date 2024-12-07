@@ -26,6 +26,29 @@
         #remover:hover {
             background-color: salmon;
         }
+       
+        .external-link {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3887be;
+            color: #ffffff;
+            font-size: 14px;
+            padding: 10px 20px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .external-link:hover {
+            background-color: #3074a4;
+        }
+
+        
     </style>
 </head>
 <body>
@@ -162,26 +185,18 @@ font-weight: bolder;">
 <nav id="menu"></nav>
 
 <div id="map"></div>
-<!-- 
-<div class='map-overlay' id='features'><h4><h3>Year One Machine Learning Map</h3> <h4>&nbsp Parcel Development Susceptibility</h4>
-<div id='pd'><p>This map visualizes properties predicted to be susceptible to future re-development in San Francisco. The two models were trained against the last decade of development pipeline data.</p></div></div> -->
+<!-- External link button -->
+<a class="external-link" style="left: 45%;" href="https://sites.google.com/view/wenhaowu/project-page/development-prediction-with-machine-learning" target="_blank">Methodology</a>
+
+<a class="external-link" style="left: 55%;" href="https://github.com/wenhaowuuu/development_potential" target="_blank">Github</a>
+
+
 <div class='map-overlay' id='legend'></div>
-
-<!-- <div id="map0"></div> -->
-
-<!-- <div id='remover'>Satellite</div> -->
 
 
 <script>
-// map.getCanvas().style.cursor = 'default';
-
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuaGFvYnJpYW4iLCJhIjoiY2owaXNrNzhnMDB4ZjJxdGoxdHdkd2VibiJ9.Cn_2Ypo7UctdNZHt6OlDHA';
-// var map0 = new mapboxgl.Map({
-//     container: 'map',
-//     style: 'mapbox://styles/mapbox/satellite-v9',
-//     zoom: 12,
-//     center: [-122.404684,37.783488]
-// });
+
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -934,7 +949,7 @@ map.on('load', function () {
 
     //ADD THE POP DENSITY FOR EACH NEIGHBORHOODS IN 3D VIEW:
     map.addLayer({
-        'id': 'Population Density',
+        'id': 'Population Density (3D)',
         'type': 'fill-extrusion',
         'source': {
               'type': 'geojson',
@@ -974,7 +989,7 @@ map.on('load', function () {
     });
 
     //add popup to the neighborhoods population density
-    map.on('click', 'Population Density', function(e) {
+    map.on('click', 'Population Density (3D)', function(e) {
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
@@ -1118,7 +1133,7 @@ var toggleableLayerIds =
     'Supervisor District',
     'Liquefaction Zones',
     'Zoned as Industrial',
-    'Population Density'
+    'Population Density (3D)'
     // 'SOM Towers'
     // 'Zoned as Residential',
     // 'Contour Lines',
