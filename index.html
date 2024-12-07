@@ -903,7 +903,7 @@ map.on('load', function () {
     firstSymbolId7);
 
     //add popup
-      map.on('click', 'Supervisor District', function(e) {
+    map.on('click', 'Supervisor District', function(e) {
         new mapboxgl.Popup()
           .setLngLat(e.lngLat)
           .setHTML(
@@ -1059,17 +1059,92 @@ map.on('load', function () {
           'visibility': 'none'
         },
         'paint': {
+          // Make circles larger as the user zooms from z12 to z22.
             'circle-radius': [
                 'interpolate',
                 ['linear'],
-                ['get', 'citations_count'], // Replace 'citations_count' with the actual column name for size
-                0, 5,
-                100, 20
+                ['get', 'sum_count'],
+                0, 10,
+                2000, 100
             ],
+            // Circle color ramp based on sum_count
+            // 'circle-color': [
+            //     'interpolate',
+            //     ['linear'],
+            //     ['get', 'sum_count'],
+            //     0, '#FEE5D9',    // Light pink for the minimum value
+            //     1000, '#FCAE91', // Medium orange for mid-value
+            //     2000, '#CB181D'  // Dark red for the maximum value
+            // ],
+            // 'circle-color': {
+            //   "property": "sum_count",
+            //   "stops": [
+            //     [10, "#fff5f0"],
+            //     [50, "#fee0d2"],
+            //     [100, "#fcbba1"],
+            //     [200, "#fc9272"],
+            //     [500, "#fb6a4a"],
+            //     [800, "#ef3b2c"],
+            //     [1000, "#cb181d"],
+            //     [1500, "#a50f15"],
+            //     [2000, "#67000d"]
+            //   ]
+            // },
+            
             'circle-color': '#E63946',
             'circle-opacity': 0.8
         }
     }, firstSymbolId10);
+
+    map.on('click', 'Red Light Camera Citations', function(e) {
+        new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(
+            "Count: "
+            + "<strong>"
+            + e.features[0].properties.sum_count
+            + "</strong>"
+            + "<br>"
+            + "Name: "
+            + "<strong>"
+            + e.features[0].properties.intersection)
+          .addTo(map);
+      });
+
+    //ADD STREET CLOSURE
+    var firstSymbolId11;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+        firstSymbolId11 = layers[i].id;
+        break;
+        }
+      }
+
+    // Add the Temporary Street Closures layer
+    map.addLayer({
+        'id': 'Temporary Street Closures',
+        'type': 'fill',
+        'source': {
+            'type': 'geojson',
+            'data': 'https://raw.githubusercontent.com/wenhaowuuu/development_potential/refs/heads/master/layer_data/Temporary%20Street%20Closures_20241207.geojson'
+        },
+        'layout': {
+          'visibility': 'none'
+        },
+        'paint': {
+            'fill-color': [
+                'match',
+                ['get', 'type'],
+                'Special Traffic Permit', '#FF5733',  // Red for Construction
+                'Special Event', '#33C1FF',         // Blue for Event
+                'Roadway Shared Spaces', '#8D33FF',         // Purple for Other
+                '#CCCCCC'                  // Default gray for unknown types
+            ],
+            // 'width': 4,
+            'fill-opacity': 0.8
+        }
+    }, firstSymbolId11);
+
 
     // Seems that any data larger than 1MB cannot be hosted directly from Github and thus, you can not render them on the webpage.
 
@@ -1169,6 +1244,7 @@ var toggleableLayerIds =
     // 'SOM Towers'
     // 'Zoned as Residential',
     'Red Light Camera Citations',
+    'Temporary Street Closures',
     'Contour Lines',
     // 'Flickr Density'
   ];
