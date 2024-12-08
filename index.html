@@ -193,6 +193,17 @@ font-weight: bolder;">
 
 <div class='map-overlay' id='legend'></div>
 
+<!-- Add sliders for filtering -->
+<div style="position: fixed; bottom: 30px; left: 20px; z-index: 1; background: white; padding: 10px; border-radius: 5px;">
+  <label for="model1-slider">Model 1: Pipeline Data</label>
+  <input type="range" id="model1-slider" min="0.5" max="1" step="0.01" value="0" style="width: 100%; margin-bottom: 10px;">
+  <span id="model1-value">0.50</span>
+
+  <br></br>
+  <label for="model2-slider">Model 2: Proximity Data</label>
+  <input type="range" id="model2-slider" min="0.5" max="1" step="0.01" value="0" style="width: 100%;">
+  <span id="model2-value">0.50</span>
+</div>
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuaGFvYnJpYW4iLCJhIjoiY2owaXNrNzhnMDB4ZjJxdGoxdHdkd2VibiJ9.Cn_2Ypo7UctdNZHt6OlDHA';
@@ -725,7 +736,13 @@ map.on('load', function () {
         },
         'paint': {
             'fill-color': '#E74C3C',
-            'fill-opacity': 0.8
+            'fill-opacity': [
+                'case',
+                ['>=', ['get', 'Predicti_2'], 0],
+                0.8,
+                0
+            ]
+            // 'fill-opacity': 0.8
             // 'line-color': '#5gg8f2',
             // 'line-width': 1.5
         },
@@ -1279,6 +1296,33 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
     var layers = document.getElementById('menu');
     layers.appendChild(link);
 }
+
+//SLIDER HANDLING FOR PREDICTION FILTERING
+// Slider handling for Model 1
+const model1Slider = document.getElementById('model1-slider');
+    const model1Value = document.getElementById('model1-value');
+
+    model1Slider.addEventListener('input', function () {
+        const filterValue = parseFloat(model1Slider.value);
+        model1Value.textContent = filterValue.toFixed(2);
+
+        map.setFilter('Model 1: Pipeline Data', [
+            '>=', ['to-number', ['get', 'Predicti_2']], filterValue       
+        ]);
+    });
+
+// Slider handling for Model 2
+const model2Slider = document.getElementById('model2-slider');
+    const model2Value = document.getElementById('model2-value');
+
+    model2Slider.addEventListener('input', function () {
+        const filterValue = parseFloat(model2Slider.value);
+        model2Value.textContent = filterValue.toFixed(2);
+
+        map.setFilter('Model 2: Proximity Data', [
+          '>=', ['to-number', ['get', 'Predicti_2']], filterValue
+        ]);
+    });
 
 </script>
 
